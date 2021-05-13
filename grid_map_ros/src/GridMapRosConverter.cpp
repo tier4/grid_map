@@ -14,6 +14,7 @@
 #include <rosbag2_cpp/writers/sequential_writer.hpp>
 #include <rosbag2_cpp/reader.hpp>
 #include <rosbag2_cpp/readers/sequential_reader.hpp>
+#include <rosbag2_storage/storage_options.hpp>
 #include <rclcpp/serialization.hpp>
 #include <rclcpp/serialized_message.hpp>
 #include <rcutils/time.h>
@@ -667,7 +668,7 @@ bool GridMapRosConverter::saveToBag(
   rclcpp::Serialization<grid_map_msgs::msg::GridMap> serialization;
   serialization.serialize_message(message.get(), &serialized_msg);
 
-  rosbag2_cpp::StorageOptions storage_options;
+  rosbag2_storage::StorageOptions storage_options;
   storage_options.uri = pathToBag;
   storage_options.storage_id = "sqlite3";
 
@@ -703,7 +704,7 @@ bool GridMapRosConverter::loadFromBag(
   const std::string & pathToBag, const std::string & topic,
   grid_map::GridMap & gridMap)
 {
-  rosbag2_cpp::StorageOptions storage_options;
+  rosbag2_storage::StorageOptions storage_options;
   storage_options.uri = pathToBag;
   storage_options.storage_id = "sqlite3";
 

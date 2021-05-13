@@ -14,6 +14,7 @@ find_package(nav_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rcutils REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
+find_package(rosbag2_storage REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(tf2 REQUIRED)
@@ -31,6 +32,7 @@ set(dependencies
   nav_msgs
   rcutils
   rosbag2_cpp
+  rosbag2_storage
   sensor_msgs
   std_msgs
   tf2
