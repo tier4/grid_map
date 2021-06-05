@@ -1,5 +1,5 @@
 pcl_grid_map_extraction:
-  num_processing_threads: 4
+  num_processing_threads: 12
   cloud_transform:
     translation:
       x: 0.0
@@ -11,7 +11,7 @@ pcl_grid_map_extraction:
       y: 0.0
   cluster_extraction:
     cluster_tolerance: 0.05
-    min_num_points: 4
+    min_num_points: 1
     max_num_points: 1000000
   outlier_removal:
     is_remove_outliers: true
@@ -25,7 +25,7 @@ pcl_grid_map_extraction:
       z: 0.02 
   grid_map:
     min_num_points_per_cell: 4
-    resolution: 0.1
+    resolution: 0.3
 
     
        

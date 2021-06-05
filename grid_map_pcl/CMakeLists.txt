@@ -2,22 +2,25 @@ cmake_minimum_required(VERSION 3.5)
 project(grid_map_pcl)
 
 ## Find ament macros and libraries
-find_package(ament_cmake REQUIRED)
-find_package(grid_map_cmake_helpers REQUIRED)
-find_package(grid_map_core REQUIRED)
-find_package(grid_map_msgs REQUIRED)
-find_package(grid_map_ros REQUIRED)
-find_package(pcl_ros REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(rcutils REQUIRED)
+# find_package(ament_cmake REQUIRED)
+# find_package(grid_map_cmake_helpers REQUIRED)
+# find_package(grid_map_core REQUIRED)
+# find_package(grid_map_msgs REQUIRED)
+# find_package(grid_map_ros REQUIRED)
+# find_package(pcl_ros REQUIRED)
+# find_package(rclcpp REQUIRED)
+# find_package(rcutils REQUIRED)
 
-find_package(OpenMP QUIET)
-if(OpenMP_FOUND)
-  add_compile_options("${OpenMP_CXX_FLAGS}")
-  add_definitions(-DGRID_MAP_PCL_OPENMP_FOUND=${OpenMP_FOUND})
-endif()
+# find_package(OpenMP QUIET)
+# if(OpenMP_FOUND)
+#   add_compile_options("${OpenMP_CXX_FLAGS}")
+#   add_definitions(-DGRID_MAP_PCL_OPENMP_FOUND=${OpenMP_FOUND})
+# endif()
 
-grid_map_package()
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+
+# grid_map_package()
 
 set(SRC_FILES
   src/GridMapPclLoader.cpp
@@ -49,59 +52,72 @@ include_directories(
 )
 
 ## Declare a cpp library
-add_library(${PROJECT_NAME} SHARED
-  ${SRC_FILES}
+ament_auto_add_library(${PROJECT_NAME} SHARED
+${SRC_FILES}
 )
 
-target_link_libraries(${PROJECT_NAME}
-  ${OpenMP_CXX_LIBRARIES}
-  yaml-cpp
-)
+# add_library(${PROJECT_NAME} SHARED
+# ${SRC_FILES}
+# )
 
-ament_target_dependencies(${PROJECT_NAME}
-  ${dependencies}
-)
+# target_link_libraries(${PROJECT_NAME}
+#   ${OpenMP_CXX_LIBRARIES}
+#   yaml-cpp
+# )
 
-add_executable(grid_map_pcl_loader_node
+# ament_target_dependencies(${PROJECT_NAME}
+#   ${dependencies}
+# )
+
+ament_auto_add_executable(grid_map_pcl_loader_node
   src/grid_map_pcl_loader_node.cpp
 )
 
-target_link_libraries(grid_map_pcl_loader_node
-  ${PROJECT_NAME}
-  ${OpenMP_CXX_LIBRARIES}
+ament_auto_add_library(elevation_map_loader_node SHARED
+  src/elevation_map_loader_node.cpp
 )
 
-ament_target_dependencies(${PROJECT_NAME}
-  ${dependencies}
+rclcpp_components_register_node(elevation_map_loader_node
+  PLUGIN "ElevationMapLoaderNode"
+  EXECUTABLE elevation_map_loader
 )
 
-#############
-## Install ##
-#############
+# add_executable(grid_map_pcl_loader_node
+#   src/grid_map_pcl_loader_node.cpp
+# )
+
+# target_link_libraries(grid_map_pcl_loader_node
+#   ${PROJECT_NAME}
+#   ${OpenMP_CXX_LIBRARIES}
+# )
+
+# ament_target_dependencies(${PROJECT_NAME}
+#   ${dependencies}
+# )
 
 # Mark executables and/or libraries for installation
-install(
-  TARGETS
-    ${PROJECT_NAME}
-    grid_map_pcl_loader_node
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
-)
+# install(
+#   TARGETS
+#     ${PROJECT_NAME}
+#     grid_map_pcl_loader_node
+#   ARCHIVE DESTINATION lib
+#   LIBRARY DESTINATION lib
+#   RUNTIME DESTINATION lib/${PROJECT_NAME}
+# )
 
-# Mark cpp header files for installation
-install(
-  DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION include/${PROJECT_NAME}
-  FILES_MATCHING PATTERN "*.hpp"
-)
+# # Mark cpp header files for installation
+# install(
+#   DIRECTORY include/${PROJECT_NAME}/
+#   DESTINATION include/${PROJECT_NAME}
+#   FILES_MATCHING PATTERN "*.hpp"
+# )
 
-install(
-  DIRECTORY
-    config
-    launch
-  DESTINATION share/${PROJECT_NAME}
-)
+# install(
+#   DIRECTORY
+#     config
+#     launch
+#   DESTINATION share/${PROJECT_NAME}
+# )
 
 #############
 ## Testing ##
@@ -158,6 +174,14 @@ if(TARGET ${PROJECT_NAME}-test)
   )
 endif()
 
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME})
-ament_package()
+# ament_export_include_directories(include)
+# ament_export_libraries(${PROJECT_NAME})
+# ament_package()
+
+#############
+## Install ##
+#############
+ament_auto_package(INSTALL_TO_SHARE
+  launch
+  config
+)

@@ -18,8 +18,8 @@ def generate_launch_description():
 
     pcl_loader_node = Node(
         package='grid_map_pcl',
-        executable='grid_map_pcl_loader_node',
-        name='grid_map_pcl_loader_node',
+        executable='elevation_map_loader',
+        name='elevation_map_loader_node',
         output='screen',
         parameters=node_params
     )
